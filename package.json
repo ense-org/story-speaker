@@ -1,0 +1,13 @@
+{
+  "name": "story-speaker",
+  "version": "0.0.0",
+  "description": "Script for automatic playback of new enses in a given story",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Clyde Shaffer",
+  "license": "MIT",
+  "dependencies": {
+  }
+}
