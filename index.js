@@ -120,7 +120,7 @@ function doReboot() {
 
 function updateCycle() {
   var recievedData = "";
-  https.get('https://producer.ense.nyc/speakerVersion, (res) => {
+  https.get('https://producer.ense.nyc/speakerVersion', (res) => {
                 pendingCheck = false;
                 res.on('data', (d) => {
                         recievedData += d;
