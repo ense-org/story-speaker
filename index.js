@@ -1,5 +1,14 @@
 var fs = require('fs');
 var https = require('https');
+var myPackageInfo = require('./package.json');
+
+function parseVersion(verString) {
+  var total = 0;
+  var nums = verString.split('.');
+  nums.forEach(function(x, ind) { total += Math.pow(10, (nums.length - ind - 1) * 2) * parseInt(x); });
+  return total;
+}
+var myVersion = parseVersion(myPackageInfo.version);
 
 var childproc = require('child_process');
 
@@ -110,10 +119,29 @@ function doReboot() {
 }
 
 function updateCycle() {
-  //TODO check for updates and reboot if there is one
+  var recievedData = "";
+  https.get('https://producer.ense.nyc/speakerVersion, (res) => {
+                pendingCheck = false;
+                res.on('data', (d) => {
+                        recievedData += d;
+                });
+                res.on('end', () => {
+                        var newVer = parseVersion(recievedData);
+                        if(newVer > myVersion) doReboot();
+                        else scheduleUpdateCheck();
+                });
+        }).on('error', (e) => {
+                scheduleUpdateCheck();
+        });
+}
+
+function scheduleUpdateCheck() {
+  setTimeout(updateCycle, 30000);
 }
 
 setInterval(mainCycle, 3000);
+
+scheduleUpdateCheck();
 
 filenamePlayNext = "online.m4a";
 playNextLoop();
