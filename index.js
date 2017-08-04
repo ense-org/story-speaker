@@ -143,5 +143,5 @@ setInterval(mainCycle, 3000);
 
 scheduleUpdateCheck();
 
-filenamePlayNext = "online.m4a";
+filenamePlayNext = "../story-speaker2/online.m4a";
 playNextLoop();
