@@ -31,6 +31,10 @@ var pendingDownload = false;
 
 function err(e) { console.error("Error:", e);}
 
+var myDeviceId = null;
+var storySpeakerAPIKey = "L1jJnvtxB0L1NfC6QcOlxt8Gxu007hVc8AafWReaMDpgMHfI";
+
+
 var download = function(url, dest, cb) {
   var file = fs.createWriteStream(dest);
   var request = https.get(url, function(response) {
@@ -145,3 +149,43 @@ scheduleUpdateCheck();
 
 filenamePlayNext = "../story-speaker2/online.m4a";
 playNextLoop();
+
+
+var deviceFileName = "./deviceSecretKey";
+if(fs.existsSync(deviceFileName)) {
+    myDeviceId = fs.readFileSync(deviceFileName, {
+        encoding : 'utf8'
+    });
+
+} else {
+    var qs = require("querystring");
+
+    var options = {
+      "method": "POST",
+      "hostname": "api.ense.nyc",
+      "port": null,
+      "path": "/device/register",
+      "headers": {
+        "content-type": "application/x-www-form-urlencoded",
+        "cache-control": "no-cache",
+        "postman-token": "2849467c-9eea-452d-f98f-471962931e2b"
+      }
+    };
+
+    var req = https.request(options, function (res) {
+      var chunks = [];
+
+      res.on("data", function (chunk) {
+        chunks.push(chunk);
+      });
+
+      res.on("end", function () {
+        var body = Buffer.concat(chunks);
+        myDeviceId = body.toString();
+        fs.writeFileSync(deviceFileName, myDeviceId);
+      });
+    });
+
+    req.write(qs.stringify({ api_key: 'L1jJnvtxB0L1NfC6QcOlxt8Gxu007hVc8AafWReaMDpgMHfI' }));
+    req.end();
+}

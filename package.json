@@ -1,6 +1,6 @@
 {
   "name": "story-speaker",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Script for automatic playback of new enses in a given story",
   "main": "index.js",
   "scripts": {
